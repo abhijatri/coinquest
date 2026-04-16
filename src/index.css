@@ -2,6 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Theme variables ────────────────────────────────────────────────────────── */
+:root {
+  /* Light mode navy → slate/white palette */
+  --navy-950: #f1f5f9;
+  --navy-900: #e2e8f0;
+  --navy-800: #ffffff;
+  --navy-700: #cbd5e1;
+  --navy-600: #94a3b8;
+  --color-bg: #f1f5f9;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --scrollbar-track: #e2e8f0;
+  --scrollbar-thumb: #94a3b8;
+  --scrollbar-thumb-hover: #64748b;
+}
+
+html.dark {
+  --navy-950: #050a1a;
+  --navy-900: #0a1628;
+  --navy-800: #0f2040;
+  --navy-700: #162d58;
+  --navy-600: #1e3a6e;
+  --color-bg: #050a1a;
+  --color-text: #ffffff;
+  --color-text-muted: #9ca3af;
+  --scrollbar-track: #0a1628;
+  --scrollbar-thumb: #162d58;
+  --scrollbar-thumb-hover: #1e3a6e;
+}
+
 /* ── Base ──────────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
@@ -17,11 +47,11 @@
 
   body {
     min-height: 100vh;
-    background-color: #050a1a;
-    color: white;
+    background-color: var(--color-bg);
+    color: var(--color-text);
     font-family: 'Nunito', system-ui, sans-serif;
-    /* Prevent layout shift from scrollbar */
     overflow-y: scroll;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   /* Tap highlight — remove on mobile */
@@ -35,15 +65,70 @@
     height: 6px;
   }
   ::-webkit-scrollbar-track {
-    background: #0a1628;
+    background: var(--scrollbar-track);
   }
   ::-webkit-scrollbar-thumb {
-    background: #162d58;
+    background: var(--scrollbar-thumb);
     border-radius: 9999px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #1e3a6e;
+    background: var(--scrollbar-thumb-hover);
   }
+}
+
+/* ── Light mode overrides ───────────────────────────────────────────────────── */
+/* Override hardcoded white text to be readable on light backgrounds */
+html:not(.dark) .text-white {
+  color: #1e293b !important;
+}
+html:not(.dark) .text-gray-400 {
+  color: #64748b !important;
+}
+html:not(.dark) .text-gray-300 {
+  color: #475569 !important;
+}
+html:not(.dark) .text-gray-500 {
+  color: #64748b !important;
+}
+/* Borders */
+html:not(.dark) .border-navy-700\/50,
+html:not(.dark) .border-navy-700 {
+  border-color: #cbd5e1 !important;
+}
+/* Backdrop on navbar */
+html:not(.dark) .bg-navy-900\/95 {
+  background-color: rgba(241, 245, 249, 0.95) !important;
+}
+/* Game board cells — keep them visible in light mode */
+html:not(.dark) .bg-navy-900 {
+  background-color: var(--navy-900) !important;
+}
+html:not(.dark) .bg-navy-800 {
+  background-color: var(--navy-800) !important;
+}
+html:not(.dark) .bg-navy-950 {
+  background-color: var(--navy-950) !important;
+}
+/* Hover states */
+html:not(.dark) .hover\:bg-navy-700:hover {
+  background-color: var(--navy-700) !important;
+}
+html:not(.dark) .hover\:bg-navy-800:hover {
+  background-color: var(--navy-900) !important;
+}
+/* Keep yellow/accent text as-is in light mode — it's colorful enough */
+html:not(.dark) .text-yellow-400 {
+  color: #d97706 !important;
+}
+html:not(.dark) .text-green-400 {
+  color: #16a34a !important;
+}
+html:not(.dark) .text-blue-400 {
+  color: #2563eb !important;
+}
+html:not(.dark) .text-coral-400,
+html:not(.dark) .text-red-400 {
+  color: #dc2626 !important;
 }
 
 /* ── Utilities ─────────────────────────────────────────────────────────────── */

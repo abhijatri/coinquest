@@ -16,7 +16,7 @@ import { ChaosGame } from './games/ChaosGame'
 
 function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-navy-950 text-white font-sans">
+    <div className="min-h-screen bg-navy-950 font-sans" style={{ color: 'var(--color-text)' }}>
       <Navbar />
       <main>{children}</main>
     </div>

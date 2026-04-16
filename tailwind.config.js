@@ -6,11 +6,11 @@ export default {
     extend: {
       colors: {
         navy: {
-          950: '#050a1a',
-          900: '#0a1628',
-          800: '#0f2040',
-          700: '#162d58',
-          600: '#1e3a6e',
+          950: 'var(--navy-950)',
+          900: 'var(--navy-900)',
+          800: 'var(--navy-800)',
+          700: 'var(--navy-700)',
+          600: 'var(--navy-600)',
         },
         yellow: {
           400: '#facc15',
