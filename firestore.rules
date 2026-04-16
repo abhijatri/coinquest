@@ -1,0 +1,61 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ─────────────────────────────────────────────────────
+
+    // Only the authenticated user can access their own documents
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    // Validate a user profile document
+    function isValidProfile() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['uid', 'displayName', 'avatarId'])
+          && data.displayName is string
+          && data.displayName.size() >= 2
+          && data.displayName.size() <= 20
+          && data.avatarId is string
+          && data.uid == request.auth.uid;
+    }
+
+    // ── User profiles ─────────────────────────────────────────────────────────
+    match /users/{uid} {
+      // Read: only the owning user
+      allow read: if isOwner(uid);
+
+      // Create: only the owning user with valid data
+      allow create: if isOwner(uid) && isValidProfile();
+
+      // Update: only the owning user; cannot change uid or createdAt
+      allow update: if isOwner(uid)
+          && request.resource.data.uid == resource.data.uid
+          && request.resource.data.keys().hasAll(['displayName', 'avatarId']);
+
+      // Delete: never (protect user data)
+      allow delete: if false;
+    }
+
+    // ── User stats ────────────────────────────────────────────────────────────
+    match /stats/{uid} {
+      // Read: only the owning user
+      allow read: if isOwner(uid);
+
+      // Create: only the owning user
+      allow create: if isOwner(uid) && request.resource.data.uid == uid;
+
+      // Update: only the owning user
+      allow update: if isOwner(uid);
+
+      // Delete: never
+      allow delete: if false;
+    }
+
+    // ── Deny everything else ──────────────────────────────────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
